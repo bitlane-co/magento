@@ -1,0 +1,61 @@
+{
+    "bitlane_state": {
+        "column": {
+            "store_id": true,
+            "name": true,
+            "value": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "bitlane_job": {
+        "column": {
+            "job_id": true,
+            "store_id": true,
+            "type": true,
+            "args": true,
+            "job_key": true,
+            "run_at": true,
+            "attempts": true,
+            "locked_until": true,
+            "lock_token": true,
+            "last_error": true,
+            "failed_at": true,
+            "created_at": true
+        },
+        "index": {
+            "BITLANE_JOB_RUN_AT_JOB_ID": true,
+            "BITLANE_JOB_LOCK_TOKEN": true,
+            "BITLANE_JOB_STORE_ID_TYPE": true,
+            "BITLANE_JOB_STORE_ID_JOB_KEY": true,
+            "BITLANE_JOB_FAILED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "bitlane_quote": {
+        "column": {
+            "quote_id": true,
+            "session_id": true,
+            "updated_at": true
+        },
+        "index": {
+            "BITLANE_QUOTE_UPDATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "bitlane_order": {
+        "column": {
+            "order_id": true,
+            "purchase_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

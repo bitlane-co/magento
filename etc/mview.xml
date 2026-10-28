@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!--
+The tables whose writes the sync follows (docs/magento-plan.md MG9): MySQL triggers write the changed ids to each
+view's changelog, whatever wrote them (the admin, the APIs, imports, mass updates, other tools' SQL), and Magento's
+indexing cron hands them to the view's class, which only queues jobs.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
+    <view id="bitlane_products" class="Bitlane\Search\Model\Indexer\Products" group="indexer">
+        <subscriptions>
+            <table name="catalog_product_entity" entity_column="entity_id"/>
+            <table name="catalog_product_entity_datetime" entity_column="entity_id"/>
+            <table name="catalog_product_entity_decimal" entity_column="entity_id"/>
+            <table name="catalog_product_entity_int" entity_column="entity_id"/>
+            <table name="catalog_product_entity_text" entity_column="entity_id"/>
+            <table name="catalog_product_entity_varchar" entity_column="entity_id"/>
+            <table name="catalog_product_entity_tier_price" entity_column="entity_id"/>
+            <table name="catalog_product_website" entity_column="product_id"/>
+            <table name="catalog_category_product" entity_column="product_id"/>
+            <table name="catalog_product_super_link" entity_column="product_id"/>
+            <table name="cataloginventory_stock_item" entity_column="product_id"/>
+            <table name="catalogrule_product_price" entity_column="product_id"/>
+            <table name="review_entity_summary" entity_column="entity_pk_value"/>
+        </subscriptions>
+    </view>
+    <view id="bitlane_categories" class="Bitlane\Search\Model\Indexer\Categories" group="indexer">
+        <subscriptions>
+            <table name="catalog_category_entity" entity_column="entity_id"/>
+            <table name="catalog_category_entity_datetime" entity_column="entity_id"/>
+            <table name="catalog_category_entity_decimal" entity_column="entity_id"/>
+            <table name="catalog_category_entity_int" entity_column="entity_id"/>
+            <table name="catalog_category_entity_text" entity_column="entity_id"/>
+            <table name="catalog_category_entity_varchar" entity_column="entity_id"/>
+        </subscriptions>
+    </view>
+    <view id="bitlane_options" class="Bitlane\Search\Model\Indexer\Options" group="indexer">
+        <subscriptions>
+            <table name="eav_attribute_option_value" entity_column="option_id"/>
+            <table name="eav_attribute_option_swatch" entity_column="option_id"/>
+        </subscriptions>
+    </view>
+    <view id="bitlane_cms_pages" class="Bitlane\Search\Model\Indexer\CmsPages" group="indexer">
+        <subscriptions>
+            <table name="cms_page" entity_column="page_id"/>
+            <table name="cms_page_store" entity_column="page_id"/>
+        </subscriptions>
+    </view>
+</config>

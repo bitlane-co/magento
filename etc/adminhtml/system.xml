@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!-- Where merchants look for an extension's settings: a link to the Bitlane screen. -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="bitlane" translate="label" sortOrder="900" showInDefault="1">
+            <label>Bitlane</label>
+            <tab>service</tab>
+            <resource>Bitlane_Search::view</resource>
+            <group id="screen" translate="label" sortOrder="10" showInDefault="1">
+                <label>Bitlane</label>
+                <field id="link" sortOrder="10" showInDefault="1">
+                    <frontend_model>Bitlane\Search\Block\Adminhtml\System\ScreenLink</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="bitlane_run" xsi:type="object">Bitlane\Search\Console\Command\RunCommand</item>
+                <item name="bitlane_status" xsi:type="object">Bitlane\Search\Console\Command\StatusCommand</item>
+                <item name="bitlane_sync" xsi:type="object">Bitlane\Search\Console\Command\SyncCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--
+    bin/magento builds every command to list them, setup:install too, before a website exists: the sync's, the
+    runner's and the sources' graphs (a session among them, which reads the store's config) wait until one runs.
+    -->
+    <type name="Bitlane\Search\Console\Command\RunCommand">
+        <arguments>
+            <argument name="runner" xsi:type="object">Bitlane\Search\Model\Queue\Runner\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Bitlane\Search\Console\Command\StatusCommand">
+        <arguments>
+            <argument name="site" xsi:type="object">Bitlane\Search\Model\Site\Site\Proxy</argument>
+            <argument name="sync" xsi:type="object">Bitlane\Search\Model\Sync\Sync\Proxy</argument>
+            <argument name="runner" xsi:type="object">Bitlane\Search\Model\Queue\Runner\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Bitlane\Search\Console\Command\SyncCommand">
+        <arguments>
+            <argument name="site" xsi:type="object">Bitlane\Search\Model\Site\Site\Proxy</argument>
+            <argument name="sync" xsi:type="object">Bitlane\Search\Model\Sync\Sync\Proxy</argument>
+        </arguments>
+    </type>
+
+    <!-- The sources of documents (Api\SourceInterface); a module adds its own here. -->
+    <type name="Bitlane\Search\Model\Source\SourcePool">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="product" xsi:type="object">Bitlane\Search\Model\Source\ProductSource</item>
+                <item name="category" xsi:type="object">Bitlane\Search\Model\Source\CategorySource</item>
+                <item name="cms_page" xsi:type="object">Bitlane\Search\Model\Source\CmsPageSource</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Bitlane\Search\Api\ChangesInterface" type="Bitlane\Search\Model\Sync\Changes"/>
+
+    <!-- Each job type's handler (Model\Queue\HandlerInterface), built when a job of its type runs. -->
+    <type name="Bitlane\Search\Model\Queue\Runner">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="sync" xsi:type="object">Bitlane\Search\Model\Sync\Changes\Proxy</item>
+                <item name="full_sync" xsi:type="object">Bitlane\Search\Model\Sync\FullSync\Proxy</item>
+                <item name="products_of" xsi:type="object">Bitlane\Search\Model\Sync\ProductsOf\Proxy</item>
+                <item name="check" xsi:type="object">Bitlane\Search\Model\Sync\Check\Proxy</item>
+                <item name="site_details" xsi:type="object">Bitlane\Search\Model\Sync\SiteDetails\Proxy</item>
+                <item name="storefront" xsi:type="object">Bitlane\Search\Model\Storefront\Storefront\Proxy</item>
+                <item name="event" xsi:type="object">Bitlane\Search\Model\Storefront\Events\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- The widget on the storefront; a module leaves pages out with a plugin on isShown(). -->
+    <preference for="Bitlane\Search\Api\StorefrontInterface" type="Bitlane\Search\Model\Storefront\Storefront"/>
+    <!-- Pages read what's kept; Bitlane's client (OAuth, the admin's URLs) is for the hourly refresh. -->
+    <type name="Bitlane\Search\Model\Storefront\Storefront">
+        <arguments>
+            <argument name="api" xsi:type="object">Bitlane\Search\Model\Connection\BitlaneApi\Proxy</argument>
+        </arguments>
+    </type>
+    <!-- Observers of carts and orders run on every one: what they need is built when they act. -->
+    <type name="Bitlane\Search\Observer\QuoteProductAdded">
+        <arguments>
+            <argument name="events" xsi:type="object">Bitlane\Search\Model\Storefront\Events\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Bitlane\Search\Observer\QuoteSaved">
+        <arguments>
+            <argument name="events" xsi:type="object">Bitlane\Search\Model\Storefront\Events\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Bitlane\Search\Observer\InvoicePaid">
+        <arguments>
+            <argument name="events" xsi:type="object">Bitlane\Search\Model\Storefront\Events\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Bitlane\Search\Observer\CreditmemoSaved">
+        <arguments>
+            <argument name="events" xsi:type="object">Bitlane\Search\Model\Storefront\Events\Proxy</argument>
+            <argument name="changes" xsi:type="object">Bitlane\Search\Model\Sync\Changes\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Bitlane\Search\Observer\OrderPlaced">
+        <arguments>
+            <argument name="changes" xsi:type="object">Bitlane\Search\Model\Sync\Changes\Proxy</argument>
+        </arguments>
+    </type>
+</config>

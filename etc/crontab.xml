@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!--
+The extension's own cron group (cron_groups.xml): the job queue's runner every minute, the dated prices' check
+every hour, after Magento's price refresh at :00, and the quotes' sessions pruned once a day.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="bitlane">
+        <job name="bitlane_run" instance="Bitlane\Search\Cron\Run" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="bitlane_dated_prices" instance="Bitlane\Search\Cron\DatedPrices" method="execute">
+            <schedule>20 * * * *</schedule>
+        </job>
+        <job name="bitlane_prune" instance="Bitlane\Search\Cron\Prune" method="execute">
+            <schedule>40 3 * * *</schedule>
+        </job>
+    </group>
+</config>

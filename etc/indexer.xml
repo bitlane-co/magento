@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!--
+The sync's indexers (docs/magento-plan.md MG9), always "Update by Schedule" (mview.xml; the data patch and the daily
+check set it): "Update on Save" has no triggers, so it would see nothing.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="bitlane_products" view_id="bitlane_products" class="Bitlane\Search\Model\Indexer\Products">
+        <title translate="true">Bitlane products</title>
+        <description translate="true">Sends changed products to Bitlane</description>
+    </indexer>
+    <indexer id="bitlane_categories" view_id="bitlane_categories" class="Bitlane\Search\Model\Indexer\Categories">
+        <title translate="true">Bitlane categories</title>
+        <description translate="true">Sends changed categories and their products to Bitlane</description>
+    </indexer>
+    <indexer id="bitlane_options" view_id="bitlane_options" class="Bitlane\Search\Model\Indexer\Options">
+        <title translate="true">Bitlane attribute options</title>
+        <description translate="true">Sends the products of renamed attribute options to Bitlane</description>
+    </indexer>
+    <indexer id="bitlane_cms_pages" view_id="bitlane_cms_pages" class="Bitlane\Search\Model\Indexer\CmsPages">
+        <title translate="true">Bitlane CMS pages</title>
+        <description translate="true">Sends changed CMS pages to Bitlane</description>
+    </indexer>
+</config>

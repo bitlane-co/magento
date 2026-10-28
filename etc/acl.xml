@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!-- Roles decide who sees the Bitlane screen and who changes it (docs/magento-plan.md MG14). -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Bitlane_Search::view" title="Bitlane" translate="title" sortOrder="55">
+                    <resource id="Bitlane_Search::manage" title="Connect and set up" translate="title" sortOrder="10"/>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

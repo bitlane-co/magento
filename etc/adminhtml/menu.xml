@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!-- A top-level Bitlane item that opens the screen (docs/magento-plan.md MG14), its mark drawn by css/menu.css. -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Bitlane_Search::bitlane" title="Bitlane" translate="title" module="Bitlane_Search"
+             sortOrder="55" action="bitlane/index/index" resource="Bitlane_Search::view"/>
+    </menu>
+</config>

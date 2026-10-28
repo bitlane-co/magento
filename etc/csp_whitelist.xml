@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!--
+What the widget loads and calls (docs/magento-plan.md MG15): its scripts from the CDN, Bitlane's API (settings,
+events) and the engines (*.bitlane.cloud), the swatch images from the CDN. Staging's hosts are under the same names.
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="bitlane-cdn" type="host">*.bitlane.co</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="bitlane-api" type="host">*.bitlane.co</value>
+                <value id="bitlane-engines" type="host">*.bitlane.cloud</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="bitlane-cdn" type="host">*.bitlane.co</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

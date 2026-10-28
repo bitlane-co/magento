@@ -1,0 +1,27 @@
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+
+/*
+ * The Bitlane menu's mark, where the admin's own items have a glyph of its
+ * icon font: an image on the same ::before, whose background color stays the
+ * theme's (its hover and active pill), its size the glyph's line.
+ */
+#menu-bitlane-search-bitlane > a::before {
+    content: '';
+    height: 3.6rem;
+    background-image: url('../images/menu-icon.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 2.4rem 2.4rem;
+}

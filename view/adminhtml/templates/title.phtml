@@ -1,0 +1,30 @@
+<?php
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+
+/**
+ * The Bitlane screen's page title: Bitlane's logo where Magento_Theme::title.phtml prints the text.
+ *
+ * @var \Magento\Theme\Block\Html\Title $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$logo = $block->getViewFileUrl('Bitlane_Search::images/logo.svg');
+?>
+<div class="page-title-wrapper">
+    <h1 class="page-title">
+        <img class="bitlane-title-logo" src="<?= $escaper->escapeUrl($logo) ?>"
+             alt="<?= $escaper->escapeHtmlAttr($block->getPageTitle()) ?>"/>
+    </h1>
+    <?= $block->getChildHtml() ?>
+</div>

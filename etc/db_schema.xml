@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <!-- What the extension keeps, by name, for the install (store 0) or a store group (Model\Support\State). -->
+    <table name="bitlane_state" resource="default" engine="innodb" comment="Bitlane state">
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" default="0"
+                comment="Store group, 0 for the install"/>
+        <column xsi:type="varchar" name="name" length="191" nullable="false" comment="Name"/>
+        <column xsi:type="mediumtext" name="value" nullable="false" comment="Value"/>
+        <column xsi:type="datetime" name="updated_at" nullable="false" comment="Last written"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="store_id"/>
+            <column name="name"/>
+        </constraint>
+    </table>
+    <!--
+    The extension's background work (Model\Queue\Jobs, docs/magento-plan.md MG10): arguments are ids and cursors, a few
+    KB at most; a job that gave up stays a week with its error (failed_at). Times are UTC.
+    -->
+    <table name="bitlane_job" resource="default" engine="innodb" comment="Bitlane jobs">
+        <column xsi:type="int" name="job_id" unsigned="true" nullable="false" identity="true" comment="Job"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" comment="Store group"/>
+        <column xsi:type="varchar" name="type" length="32" nullable="false" comment="What runs it"/>
+        <column xsi:type="text" name="args" nullable="false" comment="Arguments, JSON"/>
+        <column xsi:type="varchar" name="job_key" length="64" nullable="true" comment="Queued once while waiting"/>
+        <column xsi:type="datetime" name="run_at" nullable="false" comment="Due"/>
+        <column xsi:type="int" name="attempts" unsigned="true" nullable="false" default="0" comment="Attempts"/>
+        <column xsi:type="datetime" name="locked_until" nullable="true" comment="Held by a runner until"/>
+        <column xsi:type="varchar" name="lock_token" length="32" nullable="true" comment="The runner's claim"/>
+        <column xsi:type="varchar" name="last_error" length="1000" nullable="true" comment="Why it last failed"/>
+        <column xsi:type="datetime" name="failed_at" nullable="true" comment="Gave up"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Queued"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="job_id"/>
+        </constraint>
+        <index referenceId="BITLANE_JOB_RUN_AT_JOB_ID" indexType="btree">
+            <column name="run_at"/>
+            <column name="job_id"/>
+        </index>
+        <index referenceId="BITLANE_JOB_LOCK_TOKEN" indexType="btree">
+            <column name="lock_token"/>
+        </index>
+        <index referenceId="BITLANE_JOB_STORE_ID_TYPE" indexType="btree">
+            <column name="store_id"/>
+            <column name="type"/>
+        </index>
+        <index referenceId="BITLANE_JOB_STORE_ID_JOB_KEY" indexType="btree">
+            <column name="store_id"/>
+            <column name="job_key"/>
+        </index>
+        <index referenceId="BITLANE_JOB_FAILED_AT" indexType="btree">
+            <column name="failed_at"/>
+        </index>
+    </table>
+    <!--
+    The search widget's session of each quote (Model\Storefront\Events, MG17), copied when the shopper adds to it:
+    payment callbacks place orders without the shopper's cookies. Our own table, so uninstalling leaves quote as it was;
+    rows of quotes untouched for 90 days go.
+    -->
+    <table name="bitlane_quote" resource="default" engine="innodb" comment="Bitlane quote sessions">
+        <column xsi:type="int" name="quote_id" unsigned="true" nullable="false" comment="Quote"/>
+        <column xsi:type="varchar" name="session_id" length="36" nullable="false" comment="The widget's session"/>
+        <column xsi:type="datetime" name="updated_at" nullable="false" comment="Last copied"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="quote_id"/>
+        </constraint>
+        <index referenceId="BITLANE_QUOTE_UPDATED_AT" indexType="btree">
+            <column name="updated_at"/>
+        </index>
+    </table>
+    <!-- Orders whose purchase was sent to Bitlane, so it's sent once (MG17). -->
+    <table name="bitlane_order" resource="default" engine="innodb" comment="Bitlane orders reported">
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" comment="Order"/>
+        <column xsi:type="datetime" name="purchase_at" nullable="false" comment="Purchase sent"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="order_id"/>
+        </constraint>
+    </table>
+</schema>

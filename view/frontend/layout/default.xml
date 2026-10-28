@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Bitlane Search for Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to a commercial license from NMC, in the file
+ * LICENSE.md that comes with it. Use, copy, modification or distribution of
+ * this file or its parts without NMC's written permission is not allowed.
+ *
+ * @author    Bitlane <https://bitlane.co>
+ * @copyright Since 2026 NMC
+ * @license   Commercial license, see LICENSE.md
+ */
+-->
+<!-- The search widget in every storefront page's head (docs/magento-plan.md MG15); Luma and Hyvä alike. -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template" name="bitlane.snippet"
+                   template="Bitlane_Search::snippet.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Bitlane\Search\ViewModel\Snippet</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

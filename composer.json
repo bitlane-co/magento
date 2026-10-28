@@ -1,0 +1,29 @@
+{
+  "version": "0.1.0",
+  "name": "bitlane/magento",
+  "description": "Bitlane search for Magento Open Source, Adobe Commerce and Mage-OS 2.4.7 to 2.4.9.",
+  "type": "magento2-module",
+  "license": "proprietary",
+  "require": {
+    "php": "~8.2.0||~8.3.0||~8.4.0||~8.5.0",
+    "magento/framework": "~103.0.7",
+    "magento/module-backend": "*",
+    "magento/module-catalog": "*",
+    "magento/module-cms": "*",
+    "magento/module-config": "*",
+    "magento/module-cron": "*",
+    "magento/module-eav": "*",
+    "magento/module-quote": "*",
+    "magento/module-sales": "*",
+    "magento/module-store": "*",
+    "magento/module-tax": "*"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Bitlane\\Search\\": ""
+    }
+  }
+}
