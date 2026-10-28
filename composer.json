@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "bitlane/magento",
   "description": "Bitlane search for Magento Open Source, Adobe Commerce and Mage-OS 2.4.7 to 2.4.9.",
   "type": "magento2-module",

@@ -182,12 +182,12 @@ class ProductDocuments
             return [];
         }
         $facets = $this->fields->merge([$this->ownValues($product, $batch), $this->statusValue($status)]);
-        // Bundles and grouped products range over their parts.
-        $final = (float) $product->getData('final_price');
-        $min = (float) ($product->getData('min_price') ?: $final);
-        $max = (float) ($product->getData('max_price') ?: $final);
-        $price = (float) $product->getData('price');
+        // Bundles and grouped products range over their parts; another
+        // product's max_price leaves out a catalogue rule.
         $parts = in_array($product->getTypeId(), ['bundle', 'grouped'], true);
+        $min = $this->paid($product);
+        $max = $parts ? (float) ($product->getData('max_price') ?: $min) : $min;
+        $price = (float) $product->getData('price');
 
         $document = $this->document($product, $product, [
             'facets' => $facets,
@@ -237,7 +237,7 @@ class ProductDocuments
 
         if ($batch->context->productDocuments === Settings::PER_PRODUCT) {
             $children = array_intersect_key($variants['children'], $choices);
-            $final = array_map(static fn (Product $child) => (float) $child->getData('final_price'), $children);
+            $final = array_map(fn (Product $child) => $this->paid($child), $children);
             $regular = array_map(static fn (Product $child) => (float) $child->getData('price'), $children);
             $inStockValues = array_map(static fn (int $childId) => $choices[$childId], $inStock);
             $document = $this->document($product, $product, [
@@ -256,7 +256,7 @@ class ProductDocuments
         foreach ($choices as $childId => $values) {
             $child = $variants['children'][$childId];
             $facets = $this->fields->merge([$own, $values]);
-            $final = (float) $child->getData('final_price');
+            $final = $this->paid($child);
             $regular = (float) $child->getData('price');
             $document = $this->document($product, $child, [
                 'facets' => $facets,
@@ -357,6 +357,19 @@ class ProductDocuments
         $document = $transport->getData('document');
 
         return is_array($document) ? $document : null;
+    }
+
+    /**
+     * What a guest pays for one: the price index's min_price (special price, catalogue rule, a tier price for one).
+     *
+     * @param Product $product
+     * @return float
+     */
+    private function paid(Product $product): float
+    {
+        $final = (float) $product->getData('final_price');
+
+        return (float) ($product->getData('min_price') ?: $final);
     }
 
     /**
